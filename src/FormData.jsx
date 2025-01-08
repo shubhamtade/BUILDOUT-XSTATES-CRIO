@@ -16,10 +16,14 @@ const FormData = ({ setCountryName, setStateN, setCityName }) => {
         const response = await fetch(
           "https://xcountries-backend.azurewebsites.net/all"
         );
+        if (!response.ok) {
+          throw new Error("Failed to fetch countries");
+        }
         const data = await response.json();
         setCountries(data);
       } catch (error) {
         console.error("Error fetching countries:", error);
+        setCountries([]); // Set countries to empty array on error
       }
     };
     fetchCountries();
