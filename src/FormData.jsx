@@ -11,61 +11,63 @@ const FormData = ({ setCountryName, setStateN, setCityName }) => {
 
   useEffect(() => {
     // Fetch countries
-    try {
-      fetch("https://xcountries-backend.azurewebsites.net/all")
-        .then((response) => response.json())
-        .then((data) => {
-          setCountries(data);
-        })
-        .catch((error) => console.error("Error fetching countries:", error));
-    } catch (error) {
-      console.error("Error: ", error.message);
-    }
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch(
+          "https://xcountries-backend.azurewebsites.net/all"
+        );
+        const data = await response.json();
+        setCountries(data);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      }
+    };
+    fetchCountries();
   }, []);
 
   useEffect(() => {
     if (selectedCountry) {
       setCountryName(selectedCountry);
       // Fetch states based on selected country
-      try {
-        fetch(
-          `https://crio-location-selector.onrender.com/country=${selectedCountry}/states`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setStates(data);
-          })
-          .catch((error) => console.error("Error fetching states:", error));
-      } catch (error) {
-        console.error("Error: ", error.message);
-      }
+      const fetchStates = async () => {
+        try {
+          const response = await fetch(
+            `https://crio-location-selector.onrender.com/country=${selectedCountry}/states`
+          );
+          const data = await response.json();
+          setStates(data);
+        } catch (error) {
+          console.error("Error fetching states:", error);
+        }
+      };
+      fetchStates();
     }
-  }, [selectedCountry]);
+  }, [selectedCountry, setCountryName]);
 
   useEffect(() => {
     if (selectedState) {
       setStateN(selectedState);
       // Fetch cities based on selected state
-      try {
-        fetch(
-          `https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setCities(data);
-          })
-          .catch((error) => console.error("Error fetching cities:", error));
-      } catch (error) {
-        console.error("Error: ", error.message);
-      }
+      const fetchCities = async () => {
+        try {
+          const response = await fetch(
+            `https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`
+          );
+          const data = await response.json();
+          setCities(data);
+        } catch (error) {
+          console.error("Error fetching cities:", error);
+        }
+      };
+      fetchCities();
     }
-  }, [selectedState]);
+  }, [selectedState, setStateN]);
 
   useEffect(() => {
     if (selectedCity) {
       setCityName(selectedCity);
     }
-  }, [selectedCity]);
+  }, [selectedCity, setCityName]);
 
   return (
     <div>
